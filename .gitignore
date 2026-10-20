@@ -1,0 +1,17 @@
+# Banco de dados gerado ao rodar a aplicação
+*.db
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Arquivos de IDE/editor
+.vscode/
+.idea/
+.DS_Store
