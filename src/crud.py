@@ -13,9 +13,10 @@ Usamos o marcador ? e passamos os valores separados. Isso evita SQL injection.
 import sqlite3
 from pathlib import Path
 
-PASTA = Path(__file__).parent
-ARQUIVO_BANCO = PASTA / 'vagas.db'
-ARQUIVO_SCHEMA = PASTA / 'schema.sql'
+# Raiz do projeto (pasta que contém src/ e sql/)
+RAIZ = Path(__file__).resolve().parent.parent
+ARQUIVO_BANCO = RAIZ / 'vagas.db'
+ARQUIVO_SCHEMA = RAIZ / 'sql' / 'schema.sql'
 
 
 def conectar(caminho=ARQUIVO_BANCO):

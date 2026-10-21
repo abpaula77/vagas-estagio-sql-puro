@@ -1,8 +1,7 @@
 -- ============================================================
 -- Estrutura do banco de vagas de estágio (SQLite)
 -- ============================================================
--- As mesmas regras do formulário Django (estagios/core/forms.py)
--- aparecem aqui como restrições do próprio banco:
+-- As regras de validação ficam no próprio banco, como restrições:
 --   * empresa precisa ter ao menos 3 caracteres
 --   * telefone precisa começar com o DDD 19
 -- Assim, nem a aplicação consegue gravar um dado inválido.

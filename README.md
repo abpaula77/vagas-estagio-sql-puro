@@ -1,40 +1,51 @@
-# CRUD com SQLite puro
+# CRUD de vagas com SQLite puro
 
-O mesmo cadastro de vagas do projeto Django, agora **sem framework**: só Python e SQL.
-O módulo `sqlite3` vem com o Python, então não há nada para instalar.
+Cadastro de vagas de estágio **sem framework**: só Python e SQL.
+O módulo `sqlite3` já vem com o Python, então não há nada para instalar.
 
-## Arquivos
+## Estrutura do projeto
 
-| Arquivo | Para que serve |
-|---|---|
-| `schema.sql` | Cria a tabela `vaga` (`CREATE TABLE`) com as restrições `NOT NULL` e `CHECK` |
-| `dados_exemplo.sql` | `INSERT`s para popular o banco |
-| `crud.py` | As quatro operações do CRUD em funções Python com SQL |
-| `app.py` | Menu no terminal que usa o `crud.py` |
-| `test_crud.py` | Testes automatizados com banco em memória |
-| `exercicios.sql` | Roteiro de consultas para praticar |
+```
+.
+├── src/                 # código Python
+│   ├── crud.py          # as quatro operações do CRUD em funções com SQL
+│   ├── app.py           # menu no terminal que usa o crud.py
+│   └── test_crud.py     # testes automatizados com banco em memória
+├── sql/                 # scripts SQL
+│   ├── schema.sql       # cria a tabela vaga (CREATE TABLE)
+│   ├── dados_exemplo.sql# INSERTs para popular o banco
+│   └── exercicios.sql   # roteiro de consultas para praticar
+├── Atividade/           # atividade proposta aos alunos
+│   └── README.md        # enunciado do relatório
+├── vagas.db             # banco gerado ao rodar a aplicação (ignorado pelo git)
+└── README.md
+```
 
 ## Como rodar
 
+A partir da raiz do projeto:
+
 ```console
-cd sql_puro
-python app.py              # menu interativo; cria o arquivo vagas.db
-python -m unittest -v      # roda os testes
+python src/app.py                    # menu interativo; cria o arquivo vagas.db na raiz
+python -m unittest discover -v -s src   # roda os testes
 ```
+
+> O `app.py` e o `test_crud.py` fazem `import crud`, então os testes precisam
+> enxergar a pasta `src/`. O `discover -s src` aponta a descoberta para lá.
 
 ## Vendo o banco por dentro
 
-O banco é um único arquivo: `vagas.db`. Para abrir:
+O banco é um único arquivo: `vagas.db`, criado na raiz do projeto. Para abrir:
 
 - **DB Browser for SQLite** (https://sqlitebrowser.org, gratuito): *Abrir banco de dados* → `vagas.db`.
   Na aba *Navegar dados* aparecem os registros; na aba *Executar SQL* dá para rodar
-  `schema.sql`, `dados_exemplo.sql` e `exercicios.sql`.
+  `sql/schema.sql`, `sql/dados_exemplo.sql` e `sql/exercicios.sql`.
 - **Terminal**, se tiver o `sqlite3` instalado:
 
   ```console
   sqlite3 vagas.db
-  sqlite> .read schema.sql
-  sqlite> .read dados_exemplo.sql
+  sqlite> .read sql/schema.sql
+  sqlite> .read sql/dados_exemplo.sql
   sqlite> .headers on
   sqlite> .mode column
   sqlite> SELECT * FROM vaga;
@@ -55,8 +66,11 @@ O banco é um único arquivo: `vagas.db`. Para abrir:
   O teste `test_sql_injection_e_gravado_como_texto` mostra que o texto malicioso é gravado
   como texto comum e não executado.
 - **`commit()`**: sem ele, as alterações não ficam gravadas no arquivo.
-- **Validação no banco**: as regras do formulário Django (empresa com 3 ou mais caracteres, DDD 19)
-  viraram `CHECK` no `schema.sql`. Se forem violadas, o banco recusa a gravação com `sqlite3.IntegrityError`.
-- **`WHERE` em UPDATE/DELETE**: sem ele, todas as linhas são afetadas (veja `exercicios.sql`).
-- **ORM × SQL**: compare `crud.py` com `estagios/core/views.py`, onde o Django gera o mesmo SQL
-  por baixo (`VagaModel.objects.create(...)` equivale a um `INSERT`).
+- **`WHERE` em UPDATE/DELETE**: sem ele, todas as linhas são afetadas (veja `sql/exercicios.sql`).
+
+## Atividade para os alunos
+
+Há uma atividade proposta na pasta [`Atividade/`](Atividade/README.md): construir um
+relatório explicando o funcionamento do projeto, registrar um exemplo de execução,
+detalhar uma função do `crud.py` e investigar o comportamento do sistema. Leia o
+enunciado completo em `Atividade/README.md`.
